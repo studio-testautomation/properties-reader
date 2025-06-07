@@ -2,6 +2,8 @@ package in.testautomationstudio.commons.pojo;
 
 import in.testautomationstudio.commons.annotation.Configuration;
 import in.testautomationstudio.commons.annotation.PropertyKey;
+import in.testautomationstudio.commons.enums.BrowserType;
+import in.testautomationstudio.commons.parser.BrowserTypeParser;
 
 @Configuration(filePath = "test-configurations.properties")
 public class TestConfiguration {
@@ -31,6 +33,9 @@ public class TestConfiguration {
 
     @PropertyKey(key = "boolean.wrapper.property")
     private Boolean booleanWrapperProperty;
+
+    @PropertyKey(key = "browser.name", defaultValue = "chrome", parser = BrowserTypeParser.class)
+    private BrowserType browserType;
 
     public String getStringProperty() {
         return stringProperty;
@@ -66,5 +71,9 @@ public class TestConfiguration {
 
     public Boolean getBooleanWrapperProperty() {
         return booleanWrapperProperty;
+    }
+
+    public BrowserType getBrowserType() {
+        return browserType;
     }
 }
