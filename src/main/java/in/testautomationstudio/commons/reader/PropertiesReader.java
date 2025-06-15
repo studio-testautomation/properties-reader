@@ -4,6 +4,7 @@ import in.testautomationstudio.commons.annotation.Configuration;
 import in.testautomationstudio.commons.annotation.PropertyKey;
 import in.testautomationstudio.commons.parser.DefaultPropertyValueParser;
 import in.testautomationstudio.commons.parser.PropertyValueParser;
+import in.testautomationstudio.commons.util.PlaceholderResolver;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -18,8 +19,6 @@ import java.util.Properties;
 
 public class PropertiesReader<T> implements ConfigurationReader<T> {
     private static final Map<Class<?>, PropertyValueParser<?>> PARSERS = new HashMap<>();
-    private static final String PLACEHOLDER_START = "${";
-    private static final String PLACEHOLDER_END = "}";
 
     static {
         PARSERS.put(int.class, (PropertyValueParser<Integer>) Integer::parseInt);
@@ -48,7 +47,7 @@ public class PropertiesReader<T> implements ConfigurationReader<T> {
             this.filePath = cls.getAnnotation(Configuration.class).filePath();
         }
         // Interpolate variables in filePath
-        this.filePath = resolvePlaceholders(this.filePath);
+        this.filePath = PlaceholderResolver.resolvePlaceholders(this.filePath);
 
         ClassLoader classLoader = PropertiesReader.class.getClassLoader();
         try (InputStream systemResource = classLoader.getResourceAsStream(filePath)) {
@@ -81,36 +80,6 @@ public class PropertiesReader<T> implements ConfigurationReader<T> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private static String resolvePlaceholders(String text) {
-        if (text == null) return null;
-        StringBuilder sb = new StringBuilder();
-        int i = 0;
-        while (i < text.length()) {
-            int start = text.indexOf(PLACEHOLDER_START, i);
-            if (start == -1) {
-                sb.append(text.substring(i));
-                break;
-            }
-            sb.append(text, i, start);
-            int end = text.indexOf(PLACEHOLDER_END, start);
-            if (end == -1) {
-                sb.append(text.substring(start));
-                break;
-            }
-            String key = text.substring(start + 2, end);
-            String value = System.getProperty(key);
-            if (value == null) {
-                value = System.getenv(key);
-            }
-            if (value == null) {
-                throw new IllegalArgumentException("No environment variable or system property found for placeholder: " + key + " in filePath: " + text);
-            }
-            sb.append(value);
-            i = end + 1;
-        }
-        return sb.toString();
     }
 
     private void setFieldValue(Field field, T target, Object value, PropertyValueParser<?> customParser) {
