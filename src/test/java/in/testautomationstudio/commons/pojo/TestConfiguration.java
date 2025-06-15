@@ -5,7 +5,7 @@ import in.testautomationstudio.commons.annotation.PropertyKey;
 import in.testautomationstudio.commons.enums.BrowserType;
 import in.testautomationstudio.commons.parser.BrowserTypeParser;
 
-@Configuration(filePath = "test-configurations.properties")
+@Configuration(filePath = "${env}-configurations.properties")
 public class TestConfiguration {
     @PropertyKey(key = "string.property")
     private String stringProperty;
