@@ -1,5 +1,6 @@
 package in.testautomationstudio.commons.reader;
 
+import in.testautomationstudio.commons.enums.BrowserType;
 import in.testautomationstudio.commons.pojo.TestConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -57,5 +58,10 @@ class PropertiesReaderTest {
     @Test
     void verifyBooleanWrapperPropertyValue() {
         Assertions.assertFalse(TEST_CONFIGURATION.getBooleanWrapperProperty());
+    }
+
+    @Test
+    void verifyBrowserTypePropertyValue() {
+        Assertions.assertEquals(BrowserType.CHROME, TEST_CONFIGURATION.getBrowserType());
     }
 }

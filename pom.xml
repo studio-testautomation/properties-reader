@@ -6,7 +6,7 @@
 
     <groupId>in.testautomationstudio</groupId>
     <artifactId>properties-reader</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>Properties file reader</name>
     <description>Reads properties files and converts to POJO</description>
     <url>https://github.com/studio-testautomation/properties-reader</url>
